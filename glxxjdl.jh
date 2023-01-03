@@ -1,0 +1,115 @@
+//entity为实体关键字，Region为实体名，首字母大写
+//（t_region）表示实体名和表名不一致，需要提供表名。
+entity User {
+//实体的属性
+	//属性名+属性类型
+}
+
+entity Operator{
+	OperatorName String
+    title Title
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Admin {
+	AdminName String,
+	title Title,
+	city String,
+	stateProvince String
+}
+
+entity Department {
+	departmentName String required
+    headdep String
+}
+
+/**
+ * Task entity.
+ * @author The JHipster team.
+ */
+entity Storage {
+	time Instant,
+	title String
+}
+
+/**
+ * The Employee entity.
+ */
+entity OutStorage {
+	/**
+	* The firstname attribute.
+	*/
+	time Instant,
+	title String
+}
+
+entity Goods {
+	godsname String,
+	quantity Integer,
+	price Long
+}
+
+entity Repoter {
+	repotertime Instant,
+	repoterName String
+}
+
+entity Massage {
+	text TextBlob
+}
+
+enum Title {
+    Staff, Team, Minster
+}
+
+relationship OneToOne {
+	User{operator} to Operator,
+    User{admin} to Admin,
+    User{repoter} to Repoter
+}
+
+relationship ManyToOne {
+	Operator{department}to Department,
+    Admin{department} to Department
+}
+
+relationship OneToMany{
+	Operator{storage}to Storage,
+    Operator{outStorage}to OutStorage
+}
+
+relationship OneToOne {
+	Storage{goods} to Goods,
+    OutStorage{goods} to Goods
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Repoter{outstorage} to OutStorage,
+    Repoter{storage} to Storage
+}
+
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
